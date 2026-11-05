@@ -1,0 +1,126 @@
+﻿
+@model BookMyTicket.Models.Booking
+
+<style>
+    body {
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+    }
+
+    .bill-container {
+        width: 450px;
+        max-width: 85%;
+        margin: 50px auto;
+        padding: 25px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #222;
+    }
+
+    .bill-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .seats {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .seat-number {
+        background-color: #e6f5ed;
+        color: #198754;
+        padding: 7px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .total {
+        border-top: 1px solid #ddd;
+        padding-top: 18px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .order-button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #198754;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 17px;
+        cursor: pointer;
+    }
+
+    .order-button:hover {
+        background-color: #146c43;
+    }
+</style>
+
+<div class="bill-container">
+
+    <h2>Booking Summary</h2>
+
+    <hr />
+
+    <div class="bill-row">
+        <span>Screen ID</span>
+        <span>@Model.Screen_Id</span>
+    </div>
+
+    <div class="bill-row">
+        <span>Selected Seats</span>
+        <div class="seats">
+            @foreach (var seat in Model.Seats)
+            {
+                <span class="seat-number">@seat</span>
+            }
+        </div>
+    </div>
+
+    <div class="bill-row">
+        <span>Number of Seats</span>
+        <span>@Model.SeatCount</span>
+    </div>
+
+    <div class="bill-row">
+        <span>Price Per Seat</span>
+        <span>₹@Model.TicketPrice</span>
+    </div>
+
+    <div class="bill-row total">
+        <span>Total Amount</span>
+        <span>₹@Model.TotalAmount</span>
+    </div>
+
+    <form asp-controller="Customer" asp-action="Payment" method="post">
+
+        <input type="hidden" name="Screen_Id" value="@Model.Screen_Id" />
+               
+              
+
+        @foreach (var seat in Model.Seats)
+        {
+            <input type="hidden" name="Seats"value="@seat" />
+                  
+                   
+        }
+
+        <button type="submit" class="order-button">Book Now </button>
+            
+       
+
+    </form>
+
+</div>

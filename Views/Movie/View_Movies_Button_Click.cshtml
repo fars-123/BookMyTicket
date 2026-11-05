@@ -1,0 +1,100 @@
+﻿@model List<BookMyTicket.Models.Movie>
+
+
+<head>
+
+    
+    <title>Movies - Book My Show</title>
+
+    <style>
+
+            body {
+                margin: 0;
+                font-family: Arial;
+                background-color: #f5f5f5;
+            }
+
+            .title {
+                text-align: center;
+                margin: 30px;
+            }
+
+            .movie-container {
+                width: 90%;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .movie-card {
+                width: 200px;
+                background-color: white;
+                padding: 10px;
+                border-radius: 10px;
+                box-shadow: 0px 2px 8px gray;
+            }
+
+            .movie-button {
+                border: none;
+                background: none;
+                padding: 0;
+                cursor: pointer;
+            }
+
+                .movie-button img {
+                    width: 200px;
+                    height: 280px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                }
+
+                    .movie-button img:hover {
+                        opacity: 0.8;
+                    }
+
+            .no-movies {
+                text-align: center;
+                font-size: 20px;
+            }
+
+    </style>
+    
+</head>
+
+<body>
+
+    
+    <div class="title">
+
+        <h2>Movies</h2>
+
+        <p>Choose your favourite movie</p>
+
+    </div>
+
+
+    @if (Model != null)
+    {
+
+            @foreach (var movie in Model)
+            {
+                <div class="movie-card">                 
+                <input type="hidden" name="Movie_Id" value="@movie.Movie_Id" />
+                    <button type="submit" class="movie-button">
+                    <img src="~/MovieImages/@movie.Movie_Image" alt="Movie Image" />
+                    </button>
+                </div>
+            }        
+    }
+    else
+    {
+        <div class="no-movies">
+
+            <p>No movies available.</p>
+
+        </div>
+    }
+    
+
+</body>

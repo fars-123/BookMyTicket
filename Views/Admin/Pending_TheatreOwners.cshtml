@@ -1,0 +1,177 @@
+﻿
+@model List<BookMyTicket.Models.User_Register>
+
+@{
+    ViewData["Title"] = "Theatre Owner Approvals";
+}
+
+<style>
+    .approval-container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 25px;
+        background-color: #111111 !important;
+        color: white !important;
+        border: 1px solid #333333;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+        font-family: Arial, sans-serif;
+    }
+
+    .approval-container h2 {
+        color: #f5c518 !important;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        color: #cccccc !important;
+        margin-bottom: 25px;
+    }
+
+    .approval-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #111111 !important;
+    }
+
+    .approval-table thead th {
+        background-color: #252525 !important;
+        color: #f5c518 !important;
+        padding: 13px;
+        text-align: left;
+        border-bottom: 2px solid #f5c518;
+        white-space: nowrap;
+    }
+
+    .approval-table tbody tr {
+        background-color: #111111 !important;
+    }
+
+    .approval-table tbody td {
+        background-color: #111111 !important;
+        color: #ffffff !important;
+        padding: 13px;
+        border-bottom: 1px solid #333333;
+    }
+
+    .approval-table tbody tr:hover td {
+        background-color: #292929 !important;
+    }
+
+    .approve-button {
+        background-color: #f5c518;
+        color: #111111;
+        border: none;
+        padding: 9px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .approve-button:hover {
+        background-color: #ffda45;
+        color: #111111;
+    }
+
+    .message {
+        background-color: #1c3828;
+        color: #a8f0c6;
+        padding: 12px;
+        border: 1px solid #2e704b;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .empty-message {
+        background-color: #111111;
+        color: #f5c518;
+        padding: 20px;
+        border: 1px solid #333333;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        text-decoration: none;
+    }
+</style>
+
+<div class="approval-container">
+
+    <a asp-controller="Admin"
+       asp-action="Admin_Pageload"
+       class="btn btn-secondary back-button">
+        ← Back to Admin Dashboard
+    </a>
+
+    <h2>Theatre Owner Approvals</h2>
+
+    <p class="subtitle">
+        Review registered Theatre Owners and approve their accounts.
+    </p>
+
+    @if (TempData["msg"] != null)
+    {
+        <div class="message">
+            @TempData["msg"]
+        </div>
+    }
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div style="overflow-x: auto;">
+            <table class="approval-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var owner in Model)
+                    {
+                        <tr>
+                            <td>@owner.FullName</td>
+                            <td>@owner.User_Name</td>
+                            <td>@owner.Email</td>
+                            <td>@owner.Phone</td>
+                            <td>@owner.Address</td>
+
+                            <td>
+                                <form asp-controller="Admin"
+                                      asp-action="Approve_TheatreOwner"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="User_Id"
+                                           value="@owner.User_Id" />
+
+                                    <button type="submit"
+                                            class="approve-button">
+                                        Approve
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-message">
+            No pending Theatre Owner approvals.
+        </div>
+    }
+
+</div>

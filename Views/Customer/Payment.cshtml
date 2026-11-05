@@ -1,0 +1,417 @@
+﻿
+@model BookMyTicket.Models.Booking
+
+<style>
+    body {
+        background-color: #101018;
+        color: white;
+    }
+
+    .payment-container {
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #1c1c29;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        font-family: Arial, sans-serif;
+    }
+
+    .payment-title {
+        text-align: center;
+        color: #ff4d6d;
+        margin-bottom: 8px;
+    }
+
+    .payment-subtitle {
+        text-align: center;
+        color: #b8b8c7;
+        margin-bottom: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 0;
+        border-bottom: 1px solid #363646;
+    }
+
+    .detail-label {
+        color: #b8b8c7;
+    }
+
+    .seat-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0 20px;
+    }
+
+    .seat {
+        background-color: #303047;
+        color: #ffffff;
+        border: 1px solid #ff4d6d;
+        padding: 8px 13px;
+        border-radius: 7px;
+    }
+
+    .total-box {
+        background-color: #29293b;
+        border-radius: 12px;
+        padding: 18px;
+        margin-top: 25px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .total-amount {
+        color: #5ee6a8;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .pay-button {
+        width: 100%;
+        margin-top: 25px;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .pay-button:hover {
+        opacity: 0.9;
+    }
+
+    .pay-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .secure-text {
+        text-align: center;
+        color: #b8b8c7;
+        font-size: 12px;
+        margin-top: 18px;
+    }
+</style>
+
+<div class="payment-container">
+
+    <h2 class="payment-title">Book My Show</h2>
+
+    <p class="payment-subtitle">
+        Complete your booking
+    </p>
+
+    <h4>Booking Summary</h4>
+
+    <div class="detail-row">
+        <span class="detail-label">Screen ID</span>
+        <strong>@Model.Screen_Id</strong>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Show Date</span>
+        <strong>@Model.ShowDate.ToString("dd-MM-yyyy")</strong>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Show Time</span>
+        <strong>@Model.StartTime</strong>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Number of Tickets</span>
+        <strong>@Model.SeatCount</strong>
+    </div>
+
+    <h4 style="margin-top:25px;">Your Selected Seats</h4>
+
+    <div class="seat-list">
+        @if (Model.Seats != null)
+        {
+            foreach (var seat in Model.Seats)
+            {
+                <span class="seat">@seat</span>
+            }
+        }
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Price per Ticket</span>
+        <strong>₹@Model.TicketPrice.ToString("0.00")</strong>
+    </div>
+
+    <div class="total-box">
+        <div class="total-row">
+            <span>Total Amount</span>
+            <span class="total-amount">
+                ₹@Model.TotalAmount.ToString("0.00")
+            </span>
+        </div>
+    </div>
+
+    <button type="button"
+            id="payButton"
+            class="pay-button"
+            onclick="payNow()">
+        Pay Now →
+    </button>
+
+    <p class="secure-text">
+        Your booking will be confirmed after successful payment.
+    </p>
+
+</div>
+
+<form id="paymentForm"
+      asp-controller="Customer"
+      asp-action="VerifyPayment"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" id="paymentId" name="paymentId" />
+    <input type="hidden" id="orderId" name="orderId" />
+    <input type="hidden" id="signature" name="signature" />
+
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    function payNow()
+    {
+        var button = document.getElementById("payButton");
+
+        if (typeof Razorpay === "undefined")
+        {
+            alert("Razorpay Checkout could not be loaded. Please try again.");
+            return;
+        }
+
+        var options = {
+            key: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RazorpayKeyId)),
+            amount: @Convert.ToInt32(Model.TotalAmount * 100),
+            currency: "INR",
+            name: "Book My Show",
+            description: "Movie Ticket Booking",
+            order_id: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.RazorpayOrderId)),
+
+            handler: function (response)
+            {
+                document.getElementById("paymentId").value =
+                    response.razorpay_payment_id;
+
+                document.getElementById("orderId").value =
+                    response.razorpay_order_id;
+
+                document.getElementById("signature").value =
+                    response.razorpay_signature;
+
+                button.disabled = true;
+                button.innerText = "Verifying Payment...";
+
+                document.getElementById("paymentForm").submit();
+            },
+
+            modal: {
+                ondismiss: function ()
+                {
+                    button.disabled = false;
+                    button.innerText = "Pay Now →";
+                }
+            }
+        };
+
+        var payment = new Razorpay(options);
+
+        payment.on("payment.failed", function ()
+        {
+            alert("Payment failed. Please try again.");
+            button.disabled = false;
+            button.innerText = "Pay Now →";
+        });
+
+        payment.open();
+    }
+</script>
+
+
+
+
+
+
+
+
+@* 
+@model BookMyTicket.Models.Booking
+
+<style>
+    body {
+        background-color: #101018;
+        color: white;
+    }
+
+    .payment-container {
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #1c1c29;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        font-family: Arial, sans-serif;
+    }
+
+    .payment-title {
+        text-align: center;
+        color: #ff4d6d;
+        margin-bottom: 8px;
+    }
+
+    .payment-subtitle {
+        text-align: center;
+        color: #b8b8c7;
+        margin-bottom: 30px;
+    }
+
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 0;
+        border-bottom: 1px solid #363646;
+    }
+
+    .detail-label {
+        color: #b8b8c7;
+    }
+
+    .seat-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0 20px;
+    }
+
+    .seat {
+        background-color: #303047;
+        color: #ffffff;
+        border: 1px solid #ff4d6d;
+        padding: 8px 13px;
+        border-radius: 7px;
+    }
+
+    .total-box {
+        background-color: #29293b;
+        border-radius: 12px;
+        padding: 18px;
+        margin-top: 25px;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .total-amount {
+        color: #5ee6a8;
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .pay-button {
+        width: 100%;
+        margin-top: 25px;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .pay-button:hover {
+        opacity: 0.9;
+    }
+
+    .secure-text {
+        text-align: center;
+        color: #b8b8c7;
+        font-size: 12px;
+        margin-top: 18px;
+    }
+</style>
+
+<div class="payment-container">
+
+    <h2 class="payment-title">Book My Show</h2>
+
+    <p class="payment-subtitle">
+        Complete your booking
+    </p>
+
+    <h4>Booking Summary</h4>
+
+    <div class="detail-row">
+        <span class="detail-label">Screen ID</span>
+        <strong>@Model.Screen_Id</strong>
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Number of Tickets</span>
+        <strong>@Model.SeatCount</strong>
+    </div>
+
+    <h4 style="margin-top:25px;">Your Selected Seats</h4>
+
+    <div class="seat-list">
+        @if (Model.Seats != null)
+        {
+            @foreach (var seat in Model.Seats)
+            {
+                <span class="seat">@seat</span>
+            }
+        }
+    </div>
+
+    <div class="detail-row">
+        <span class="detail-label">Price per Ticket</span>
+        <strong>₹@Model.TicketPrice.ToString("0.00")</strong>
+    </div>
+
+    <div class="total-box">
+        <div class="total-row">
+            <span>Total Amount</span>
+            <span class="total-amount">
+                ₹@Model.TotalAmount.ToString("0.00")
+            </span>
+        </div>
+    </div>
+
+    <button type="button" class="pay-button"
+            onclick="alert('Razorpay payment will be connected next.')">
+        Pay Now →
+    </button>
+
+    <p class="secure-text">
+        Your booking will be confirmed after successful payment.
+    </p>
+
+</div>
+ *@

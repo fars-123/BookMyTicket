@@ -1,0 +1,502 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Book My Ticket</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookMyTicket.styles.css" asp-append-version="true" />
+
+    <style>
+
+        /* =========================================
+           LAYOUT THEME VARIABLES
+        ========================================= */
+
+        :root {
+            --page-bg: #080D35;
+            --navbar-bg: #080D35;
+            --content-bg: #111746;
+            --text-color: #ffffff;
+            --muted-color: #b8c1e8;
+            --border-color: #303875;
+            --accent-color: #6515C8;
+            --accent-hover: #E83DAB;
+
+            --gradient-bg: linear-gradient(
+                135deg,
+                #080D35,
+                #10165A,
+                #27066F
+            );
+
+            --button-gradient: linear-gradient(
+                90deg,
+                #1748D8,
+                #6515C8,
+                #E83DAB
+            );
+        }
+
+        /* =========================================
+           LIGHT MODE
+        ========================================= */
+
+        body.light-mode {
+            --page-bg: #F4F2FF;
+            --navbar-bg: #FFFFFF;
+            --content-bg: #FFFFFF;
+            --text-color: #19143D;
+            --muted-color: #706B91;
+            --border-color: #DCD5FA;
+            --accent-color: #6545D8;
+            --accent-hover: #D83C9E;
+
+            --gradient-bg: linear-gradient(
+                135deg,
+                #F4F2FF,
+                #E7E9FF,
+                #FBE5F5
+            );
+        }
+
+        /* =========================================
+           BODY
+        ========================================= */
+
+        body {
+            margin: 0;
+            background: var(--gradient-bg);
+            background-attachment: fixed;
+            color: var(--text-color);
+            font-family: "Segoe UI", Arial, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .main-navbar {
+            background: var(--navbar-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 13px 0;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
+            transition: 0.3s;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-color) !important;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 42px;
+            height: 42px;
+
+            background: var(--button-gradient);
+            color: white;
+
+            border-radius: 12px;
+            font-size: 23px;
+
+            box-shadow: 0 4px 15px rgba(101, 21, 200, 0.35);
+        }
+
+        .brand-highlight {
+            background: linear-gradient(
+                90deg,
+                #4385FF,
+                #A34BFF,
+                #E83DAB
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--muted-color) !important;
+            font-weight: 600;
+            padding: 10px 17px !important;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active {
+            background: rgba(101, 69, 216, 0.15);
+            color: var(--accent-hover) !important;
+        }
+
+        /* =========================================
+           THEME BUTTON
+        ========================================= */
+
+        .theme-button {
+            background: var(--button-gradient);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .theme-button:hover {
+            background: linear-gradient(
+                90deg,
+                #2868F5,
+                #8128E8,
+                #F04EBB
+            );
+
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(101, 21, 200, 0.3);
+        }
+
+        /* =========================================
+           PAGE CONTENT
+        ========================================= */
+
+        .page-container {
+            min-height: 75vh;
+            padding-top: 25px;
+            padding-bottom: 35px;
+        }
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .main-footer {
+            background: var(--navbar-bg);
+            border-top: 1px solid var(--border-color);
+            color: var(--muted-color);
+            padding: 19px 0;
+            text-align: center;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .footer-brand {
+            background: linear-gradient(
+                90deg,
+                #4385FF,
+                #A34BFF,
+                #E83DAB
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            font-weight: 700;
+        }
+
+        /* =========================================
+           MOBILE NAVBAR
+        ========================================= */
+
+        .navbar-toggler {
+            border-color: var(--border-color);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(0.7);
+        }
+
+        body.light-mode .navbar-toggler-icon {
+            filter: none;
+        }
+
+        @@media (max-width: 767px) {
+
+            .brand-icon {
+                width: 37px;
+                height: 37px;
+                font-size: 20px;
+            }
+
+            .navbar-brand {
+                font-size: 20px;
+            }
+
+            .theme-button {
+                margin: 10px 0;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="navbar navbar-expand-lg main-navbar">
+
+            <div class="container">
+
+                @* Customer logo goes to movie list *@
+
+                @if (TempData.Peek("Role")?.ToString() == "User")
+                {
+                    <a class="navbar-brand"
+                       asp-controller="Customer"
+                       asp-action="Customer_Pageload">
+
+                        <span class="brand-icon">🎟</span>
+
+                        <span>
+                            Book My <span class="brand-highlight">Ticket</span>
+                        </span>
+
+                    </a>
+                }
+                else
+                {
+                    <a class="navbar-brand"
+                       asp-controller="Login"
+                       asp-action="Login_Pageload">
+
+                        <span class="brand-icon">🎟</span>
+
+                        <span>
+                            Book My <span class="brand-highlight">Ticket</span>
+                        </span>
+
+                    </a>
+                }
+
+
+                <!-- MOBILE MENU BUTTON -->
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                        @* Home visible only to customers *@
+
+                        @if (TempData.Peek("Role")?.ToString() == "User")
+                        {
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Customer"
+                                   asp-action="Customer_Pageload">
+
+                                    🏠 Home
+
+                                </a>
+
+                            </li>
+                        }
+
+
+                        <!-- DARK / LIGHT MODE BUTTON -->
+
+                        <li class="nav-item ms-lg-2">
+
+                            <button type="button"
+                                    class="theme-button"
+                                    id="themeToggle"
+                                    onclick="toggleTheme()">
+
+                                ☀️ Light Mode
+
+                            </button>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- PAGE CONTENT -->
+
+    <main class="container page-container">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="main-footer">
+
+        <div class="container">
+
+            <span class="footer-brand">
+                🎟 Book My Ticket
+            </span>
+
+            <span>
+                &nbsp; | &nbsp; Your next movie experience starts here.
+            </span>
+
+            <div class="mt-1">
+
+                &copy; 2026 Book My Ticket. All rights reserved.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- SCRIPTS -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <!-- THEME TOGGLE SCRIPT -->
+
+    <script>
+
+        function applyTheme(theme) {
+
+            var themeButton = document.getElementById("themeToggle");
+
+            if (theme === "light") {
+
+                document.body.classList.add("light-mode");
+
+                themeButton.innerHTML = "🌙 Dark Mode";
+
+            }
+            else {
+
+                document.body.classList.remove("light-mode");
+
+                themeButton.innerHTML = "☀️ Light Mode";
+
+            }
+
+        }
+
+
+        function toggleTheme() {
+
+            var isLight = document.body.classList.contains("light-mode");
+
+            var newTheme = isLight ? "dark" : "light";
+
+            localStorage.setItem("bookMyTicketTheme", newTheme);
+
+            applyTheme(newTheme);
+
+        }
+
+
+        (function () {
+
+            var savedTheme = localStorage.getItem("bookMyTicketTheme") || "dark";
+
+            applyTheme(savedTheme);
+
+        })();
+
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+
+
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookMyTicket</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BookMyTicket.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookMyTicket</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - BookMyTicket - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+ *@

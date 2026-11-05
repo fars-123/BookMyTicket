@@ -1,0 +1,22 @@
+﻿@model List<BookMyTicket.Models.Movie>
+
+<div style="display:flex; flex-wrap:wrap; gap:20px;">
+
+    @foreach (var movie in Model)
+    {
+        <div style="text-align:center;">
+
+            <a asp-action="View_Theatre_with_Shows" asp-route-movie_id="@movie.Movie_Id">
+                <img src="~/MovieImages/@movie.Movie_Image" width="250" height="300" />
+
+            </a>
+
+            <div>
+                @movie.Movie_Name
+            </div>
+
+        </div>
+    }
+   
+
+</div>

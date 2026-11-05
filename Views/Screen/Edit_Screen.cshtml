@@ -1,0 +1,57 @@
+﻿@model BookMyTicket.Models.Screen
+
+<h2>Edit Show Details</h2>
+
+<form asp-action="Update_Screen" asp-controller="Screen" method="post">
+
+    <input type="hidden" asp-for="Screen_Id" />
+
+    <label>Movie Name</label>
+    <select asp-for="Movie_Id" class="form-control">
+        @foreach (var movie in Model.Movie_List)
+        {
+            <option value="@movie.Movie_Id">@movie.Movie_Name</option>
+        }
+    </select>
+
+    <br />
+
+    <label>Screen Name</label>
+    <input asp-for="ScreenName" class="form-control" />
+
+    <br />
+
+    <label>Rows</label>
+    <input asp-for="Rows" class="form-control" />
+
+    <br />
+
+    <label>Columns</label>
+    <input asp-for="Columns" class="form-control" />
+
+    <br />
+
+    <label>Show Date</label>
+    <input asp-for="ShowDate" type="date" class="form-control"
+           value="@Model.ShowDate.ToString("yyyy-MM-dd")" />
+
+    <br />
+
+    <label>Start Time</label>
+    <input asp-for="StartTime" type="time" class="form-control" />
+
+    <br />
+
+    <label>End Time</label>
+    <input asp-for="EndTime" type="time" class="form-control" />
+
+    <br />
+
+    <label>Ticket Price</label>
+    <input asp-for="TicketPrice" class="form-control" />
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Update Show</button>
+
+</form>

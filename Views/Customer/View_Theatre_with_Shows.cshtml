@@ -1,0 +1,66 @@
+﻿@model List<BookMyTicket.Models.Show>
+
+<style>
+
+    .page {
+        width: 80%;
+        margin: 30px auto;
+    }
+
+    .movie-title {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .theatre {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .time-button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: 1px solid #999;
+        border-radius: 6px;
+        background-color: white;
+        text-decoration: none;
+        color: black;
+        display: inline-block;
+    }
+
+</style>
+
+<div class="page">
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <h2 class="movie-title">@Model[0].Movie_Name</h2>
+
+        @foreach (var item in Model)
+        {
+            <div class="theatre">
+
+                <h3>
+                    @item.FullName
+                </h3>
+
+                <a asp-controller="Customer"
+                   asp-action="View_Seats"
+                   asp-route-screen_id="@item.Screen_Id"
+                   class="time-button">
+
+                    @DateTime.Today.Add(item.StartTime).ToString("hh:mm tt")
+
+                </a>
+
+            </div>
+        }
+    }
+    else
+    {
+        <h2 class="movie-title">No shows available</h2>
+    }
+
+</div>

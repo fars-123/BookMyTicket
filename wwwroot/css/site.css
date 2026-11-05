@@ -1,0 +1,342 @@
+
+/* =========================================
+   BOOK MY TICKET - GENERAL SETTINGS
+========================================= */
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* =========================================
+   DARK MODE - BLUE, PURPLE AND PINK
+========================================= */
+
+:root {
+    color-scheme: dark;
+    --page-bg: #080D35;
+    --navbar-bg: #080D35;
+    --card-bg: #111746;
+    --text-color: #ffffff;
+    --muted-color: #b8c1e8;
+    --border-color: #303875;
+    --accent-color: #6950E8;
+    --accent-hover: #E83DAB;
+    --input-bg: #10163F;
+    --gradient-bg: linear-gradient( 135deg, #080D35 0%, #10165A 45%, #27066F 100% );
+    --button-gradient: linear-gradient( 90deg, #1748D8, #6515C8, #E83DAB );
+}
+
+/* =========================================
+   LIGHT MODE - LAVENDER AND SOFT PINK
+========================================= */
+
+body.light-mode {
+    color-scheme: light;
+    --page-bg: #F4F2FF;
+    --navbar-bg: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --text-color: #19143D;
+    --muted-color: #706B91;
+    --border-color: #DCD5FA;
+    --accent-color: #6545D8;
+    --accent-hover: #D83C9E;
+    --input-bg: #FFFFFF;
+    --gradient-bg: linear-gradient( 135deg, #F4F2FF 0%, #E7E9FF 50%, #FBE5F5 100% );
+    --button-gradient: linear-gradient( 90deg, #1748D8, #6515C8, #E83DAB );
+}
+
+/* =========================================
+   BODY BACKGROUND
+========================================= */
+
+body {
+    margin: 0;
+    margin-bottom: 60px;
+    min-height: 100vh;
+    background: var(--gradient-bg);
+    background-attachment: fixed;
+    color: var(--text-color);
+    font-family: "Segoe UI", Arial, sans-serif;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* =========================================
+   NAVBAR AND FOOTER
+========================================= */
+
+.main-navbar,
+.main-footer {
+    background: var(--navbar-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.navbar {
+    background: var(--navbar-bg) !important;
+}
+
+.navbar-brand {
+    color: var(--text-color) !important;
+    font-weight: 700;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-color) !important;
+    transition: color 0.3s;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #E83DAB !important;
+    }
+
+.main-footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* =========================================
+   COMMON CARDS AND CONTAINERS
+========================================= */
+
+.card,
+.movie-card,
+.form-container,
+.dashboard-card,
+.modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+    .card:hover,
+    .movie-card:hover {
+        border-color: var(--accent-color);
+    }
+
+/* =========================================
+   TEXT
+========================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+th,
+td {
+    color: var(--text-color);
+}
+
+.text-muted {
+    color: var(--muted-color) !important;
+}
+
+body.light-mode .text-dark {
+    color: var(--text-color) !important;
+}
+
+/* =========================================
+   INPUTS AND DROPDOWNS
+========================================= */
+
+.form-control,
+.form-select {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+    .form-control::placeholder {
+        color: var(--muted-color);
+        opacity: 1;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px rgba(101, 69, 216, 0.4);
+    }
+
+/* =========================================
+   BUTTONS - BLUE PURPLE PINK GRADIENT
+========================================= */
+
+.btn-primary,
+.theme-button {
+    background: var(--button-gradient) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+    .btn-primary:hover,
+    .theme-button:hover {
+        background: linear-gradient( 90deg, #2868F5, #8128E8, #F04EBB ) !important;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(101, 21, 200, 0.35);
+    }
+
+.btn-secondary {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+    .btn-secondary:hover {
+        background-color: var(--border-color);
+        color: var(--text-color);
+    }
+
+/* =========================================
+   LINKS
+========================================= */
+
+a {
+    color: #55BFFF;
+    transition: color 0.3s;
+}
+
+    a:hover {
+        color: #E83DAB;
+    }
+
+body.light-mode a {
+    color: #6545D8;
+}
+
+    body.light-mode a:hover {
+        color: #D83C9E;
+    }
+
+/* =========================================
+   TABLES
+========================================= */
+
+.table {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+    .table th,
+    .table td {
+        border-color: var(--border-color);
+    }
+
+body.light-mode .table {
+    --bs-table-color: var(--text-color);
+    --bs-table-bg: var(--card-bg);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-striped-color: var(--text-color);
+    --bs-table-hover-color: var(--text-color);
+}
+
+/* =========================================
+   CHECKBOXES
+========================================= */
+
+.form-check-input {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+}
+
+    .form-check-input:checked {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+
+/* =========================================
+   NAVBAR MOBILE BUTTON
+========================================= */
+
+.navbar-toggler {
+    border-color: var(--border-color);
+}
+
+.navbar-toggler-icon {
+    filter: invert(0.7);
+}
+
+body.light-mode .navbar-toggler-icon {
+    filter: none;
+}
+
+/* =========================================
+   FOCUS EFFECTS
+========================================= */
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem var(--page-bg), 0 0 0 0.3rem var(--accent-color);
+}
+
+/* =========================================
+   THEME TRANSITIONS
+========================================= */
+
+.card,
+.movie-card,
+.form-container,
+.dashboard-card,
+.modal-content,
+.form-control,
+.form-select,
+.btn,
+.nav-link,
+.main-navbar,
+.main-footer {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+
+
+/*html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}*/

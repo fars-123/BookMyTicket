@@ -1,0 +1,80 @@
+﻿@model BookMyTicket.Models.Movie
+
+<form asp-action="Movie_Insert_Button_click" class="form-horizontal" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="control-label">Movie Name</label>
+        <input asp-for="Movie_Name" id="txt1" class="form-control" />
+        <span asp-validation-for="Movie_Name" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">Movie Description</label>
+        <input asp-for="Movie_Description" id="txt2" class="form-control" />
+        <span asp-validation-for="Movie_Description" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">Language</label>
+        <input asp-for="Language" id="txt3" class="form-control" />
+        <span asp-validation-for="Language" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+    <label class="control-label">Movie Image</label>
+    <input type="file" asp-for="Movie_Image_File" id="txt4" class="form-control" />
+</div>
+
+    <div class="form-group">
+        <label class="control-label">Date</label>
+        <input type="date" asp-for="Date" id="txt5" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">Genre</label>
+        <input asp-for="Genre" id="txt6" class="form-control" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">Year</label>
+
+        <select asp-for="Year" class="form-control" id="txt7">
+            <option value="">- Select Year -</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+        </select>
+
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Insert" class="btn btn-danger" />
+    </div>
+</form>
+@{
+    if (TempData["msg"] != null)
+    {
+        <script>
+
+            alert('@TempData["msg"]');
+
+            document.getElementById("txt1").value = "";
+            document.getElementById("txt2").value = "";
+            document.getElementById("txt3").value = "";
+            document.getElementById("txt5").value = "";
+            document.getElementById("txt6").value = "";
+            document.getElementById("txt7").value = "";
+
+        </script>
+    }
+}

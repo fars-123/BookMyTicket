@@ -1,0 +1,136 @@
+﻿@model BookMyTicket.Models.Screen
+<form asp-action="Screen_Insert_Button_Click" class="form-horizontal" method="post">
+
+    <div class="form-group">
+    <label class="control-label">Movie Name</label>
+    <select asp-for="Movie_Id" id="txt2" class="form-control">
+
+       <option value="">-- Select Movie --</option>
+            @foreach (var item in Model.Movie_List)
+            {
+                <option value="@item.Movie_Id">@item.Movie_Name</option>                                 
+            }
+
+        </select>
+
+        <span asp-validation-for="Movie_Id" class="text-danger"></span>
+              
+    </div>
+
+    <div class="form-group">
+    <label class="control-label">Screen Name</label>
+    <input asp-for="ScreenName" id="txt1" class="form-control" />
+    <span asp-validation-for="ScreenName" class="text-danger"></span>
+    </div>
+
+
+  
+
+
+    <div class="form-group">
+        <label class="control-label">Rows</label>
+
+        <input asp-for="Rows"
+               id="txt3"
+               type="number"
+               class="form-control" />
+
+        <span asp-validation-for="Rows"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">Columns</label>
+
+        <input asp-for="Columns"
+               id="txt4"
+               type="number"
+               class="form-control" />
+
+        <span asp-validation-for="Columns"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">Show Date</label>
+
+        <input asp-for="ShowDate"
+               id="txt5"
+               type="date"
+               class="form-control" />
+
+        <span asp-validation-for="ShowDate"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">Start Time</label>
+
+        <input asp-for="StartTime"
+               id="txt6"
+               type="time"
+               class="form-control" />
+
+        <span asp-validation-for="StartTime"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">End Time</label>
+
+        <input asp-for="EndTime"
+               id="txt7"
+               type="time"
+               class="form-control" />
+
+        <span asp-validation-for="EndTime"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">Ticket Price</label>
+
+        <input asp-for="TicketPrice"
+               id="txt8"
+               type="number"
+               step="0.01"
+               class="form-control" />
+
+        <span asp-validation-for="TicketPrice"
+              class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit"
+               value="Insert"
+               class="btn btn-danger" />
+    </div>
+
+</form>
+
+
+@{
+    if (TempData["msg"] != null)
+    {
+        <script>
+
+            alert('@TempData["msg"]');
+
+            document.getElementById("txt1").value = "";
+            document.getElementById("txt2").selectedIndex = 0;
+            document.getElementById("txt3").value = "";
+            document.getElementById("txt4").value = "";
+            document.getElementById("txt5").value = "";
+            document.getElementById("txt6").value = "";
+            document.getElementById("txt7").value = "";
+            document.getElementById("txt8").value = "";
+
+        </script>
+    }
+}

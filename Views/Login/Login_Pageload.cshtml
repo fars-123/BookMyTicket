@@ -1,0 +1,660 @@
+﻿
+@model BookMyTicket.Models.User_Register
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    /* =========================================
+       MAIN PAGE
+    ========================================= */
+
+    .page-container {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* =========================================
+       TOP GRADIENT BANNER
+    ========================================= */
+
+    .movie-banner-section {
+        width: 100%;
+        min-height: 380px;
+        box-sizing: border-box;
+        padding: 70px 25px;
+
+        background: linear-gradient(
+            135deg,
+            #080D35,
+            #10165A,
+            #27066F,
+            #6515C8
+        );
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .movie-banner-section::before {
+        content: "";
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        background: rgba(232, 61, 171, 0.15);
+        border-radius: 50%;
+        top: -150px;
+        right: -70px;
+        filter: blur(15px);
+    }
+
+    .movie-banner-section::after {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: rgba(23, 72, 216, 0.25);
+        border-radius: 50%;
+        bottom: -150px;
+        left: -70px;
+        filter: blur(15px);
+    }
+
+    .movie-banner-content {
+        position: relative;
+        z-index: 2;
+        max-width: 950px;
+    }
+
+    .banner-title {
+        font-size: 44px;
+        font-weight: 800;
+        margin-bottom: 18px;
+        line-height: 1.3;
+        color: white;
+    }
+
+    .banner-highlight {
+        background: linear-gradient(
+            90deg,
+            #4385FF,
+            #A34BFF,
+            #E83DAB
+        );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .banner-subtitle {
+        color: #F4F2FF;
+        font-size: 17px;
+        line-height: 1.8;
+        max-width: 750px;
+        margin: 0 auto;
+    }
+
+    /* =========================================
+       INTRODUCTION AND LOGIN CONTAINER
+    ========================================= */
+
+    .intro-login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+
+        width: 94%;
+        max-width: 1250px;
+
+        margin: 55px auto;
+        padding: 55px;
+
+        box-sizing: border-box;
+        border-radius: 20px;
+
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    }
+
+    /* =========================================
+       LEFT INTRODUCTION PANEL
+    ========================================= */
+
+    .intro-text-panel {
+        flex: 1;
+        text-align: left;
+    }
+
+    .intro-title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: var(--text-color);
+        line-height: 1.4;
+    }
+
+    .intro-title span {
+        background: linear-gradient(
+            90deg,
+            #4385FF,
+            #A34BFF,
+            #E83DAB
+        );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .intro-paragraph {
+        color: var(--muted-color);
+        font-size: 15px;
+        line-height: 1.9;
+        margin-bottom: 22px;
+    }
+
+    .intro-features {
+        margin-top: 25px;
+    }
+
+    .intro-feature {
+        color: var(--text-color);
+        font-size: 15px;
+        margin-bottom: 16px;
+    }
+
+    .intro-feature span {
+        color: #E83DAB;
+        margin-right: 10px;
+        font-size: 18px;
+    }
+
+    /* =========================================
+       LOGIN PANEL
+    ========================================= */
+
+    .login-panel {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 450px;
+
+        background: var(--card-bg);
+        padding: 40px;
+
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+
+        box-sizing: border-box;
+    }
+
+    /* LOGIN ICON */
+
+    .login-icon {
+        width: 75px;
+        height: 75px;
+
+        margin: 0 auto 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: linear-gradient(
+            135deg,
+            #1748D8,
+            #6515C8,
+            #E83DAB
+        );
+
+        border-radius: 20px;
+        font-size: 38px;
+
+        box-shadow: 0 6px 18px rgba(101, 21, 200, 0.3);
+    }
+
+    /* LOGIN HEADING */
+
+    .login-title {
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+
+        background: linear-gradient(
+            90deg,
+            #4385FF,
+            #A34BFF,
+            #E83DAB
+        );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: var(--muted-color);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    /* =========================================
+       FORM
+    ========================================= */
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 8px;
+    }
+
+    .login-input {
+        width: 100%;
+        height: 48px;
+        box-sizing: border-box;
+
+        padding: 12px 14px;
+
+        background: var(--input-bg);
+        color: var(--text-color);
+
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+
+        font-size: 15px;
+        outline: none;
+    }
+
+    .login-input:focus {
+        border-color: #6515C8;
+        box-shadow: 0 0 0 3px rgba(101, 21, 200, 0.15);
+    }
+
+    .login-input::placeholder {
+        color: var(--muted-color);
+        opacity: 0.8;
+    }
+
+    .validation-message {
+        color: #E83DAB;
+        font-size: 13px;
+    }
+
+    /* =========================================
+       LOGIN BUTTON
+    ========================================= */
+
+    .login-btn {
+        width: 100%;
+        height: 49px;
+
+        border: none;
+        border-radius: 10px;
+
+        background: linear-gradient(
+            90deg,
+            #1748D8,
+            #6515C8,
+            #E83DAB
+        );
+
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 18px rgba(101, 21, 200, 0.35);
+    }
+
+    /* =========================================
+       LOGIN MESSAGE
+    ========================================= */
+
+    .login-message {
+        background: rgba(232, 61, 171, 0.12);
+        color: #E83DAB;
+
+        padding: 12px;
+        border-radius: 8px;
+
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* =========================================
+       SIGNUP LINK
+    ========================================= */
+
+    .signup-text {
+        text-align: center;
+        margin-top: 25px;
+
+        color: var(--muted-color);
+        font-size: 14px;
+    }
+
+    .signup-text a {
+        color: #A34BFF;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .signup-text a:hover {
+        color: #E83DAB;
+        text-decoration: underline;
+    }
+
+    /* =========================================
+       RESPONSIVE DESIGN
+    ========================================= */
+
+    @@media (max-width: 900px) {
+
+        .movie-banner-section {
+            min-height: 330px;
+            padding: 45px 20px;
+        }
+
+        .intro-login-container {
+            flex-direction: column;
+            gap: 40px;
+            padding: 35px 25px;
+            margin: 35px auto;
+            width: 92%;
+        }
+
+        .intro-text-panel,
+        .login-panel {
+            flex: none;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-card {
+            max-width: 500px;
+        }
+
+        .banner-title {
+            font-size: 32px;
+        }
+
+        .banner-subtitle {
+            font-size: 15px;
+        }
+    }
+
+    @@media (max-width: 500px) {
+
+        .movie-banner-section {
+            min-height: 280px;
+            padding: 30px 15px;
+        }
+
+        .banner-title {
+            font-size: 26px;
+        }
+
+        .intro-login-container {
+            padding: 25px 18px;
+        }
+
+        .login-card {
+            padding: 28px 22px;
+        }
+
+        .intro-title {
+            font-size: 28px;
+        }
+    }
+
+</style>
+
+
+<div class="page-container">
+
+    <!-- =====================================
+         TOP GRADIENT BANNER
+    ====================================== -->
+
+    <div class="movie-banner-section">
+
+        <div class="movie-banner-content">
+
+            <h1 class="banner-title">
+                Your Gateway to
+                <span class="banner-highlight">Unforgettable</span>
+                Movie Experiences
+            </h1>
+
+            <p class="banner-subtitle">
+                Discover the latest movies, choose your favourite shows,
+                select your preferred seats and book your tickets with ease.
+                Every great movie experience begins with Book My Ticket!
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         INTRODUCTION AND LOGIN SECTION
+    ====================================== -->
+
+    <div class="intro-login-container">
+
+        <!-- LEFT INTRODUCTION PANEL -->
+
+        <div class="intro-text-panel">
+
+            <h2 class="intro-title">
+                Welcome to
+                <span>Book My Ticket</span>
+            </h2>
+
+            <p class="intro-paragraph">
+                We bring your movie experience closer to you.
+                Discover exciting movies, explore available theatres
+                and book your favourite shows from the comfort of your home.
+            </p>
+
+            <p class="intro-paragraph">
+                No long queues, no last-minute worries!
+                Choose your movie, select your seats and get ready
+                to enjoy the magic of cinema.
+            </p>
+
+            <div class="intro-features">
+
+                <div class="intro-feature">
+                    <span>✦</span> Explore the latest movies
+                </div>
+
+                <div class="intro-feature">
+                    <span>✦</span> Choose your favourite theatre and show
+                </div>
+
+                <div class="intro-feature">
+                    <span>✦</span> Select your preferred seats
+                </div>
+
+                <div class="intro-feature">
+                    <span>✦</span> Enjoy easy and secure ticket booking
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT LOGIN PANEL -->
+
+        <div class="login-panel">
+
+            <div class="login-card">
+
+                <div class="login-icon">
+                    🎟️
+                </div>
+
+                <h2 class="login-title">
+                    Welcome Back!
+                </h2>
+
+                <p class="login-subtitle">
+                    Sign in to Book My Ticket and enjoy your favourite movies.
+                </p>
+
+
+                <!-- LOGIN MESSAGE -->
+
+                @if (TempData["msglog"] != null)
+                {
+                    <div class="login-message">
+                        @TempData["msglog"]
+                    </div>
+                }
+
+
+                <!-- LOGIN FORM -->
+
+                <form asp-controller="Login"
+                      asp-action="Login_Button_Click"
+                      method="post">
+
+                    <div class="form-group">
+
+                        <label asp-for="User_Name">
+                            Username
+                        </label>
+
+                        <input asp-for="User_Name"
+                               class="login-input"
+                               placeholder="Enter your username"
+                               autocomplete="username" />
+
+                        <span asp-validation-for="User_Name"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label asp-for="Password">
+                            Password
+                        </label>
+
+                        <input asp-for="Password"
+                               type="password"
+                               class="login-input"
+                               placeholder="Enter your password"
+                               autocomplete="current-password" />
+
+                        <span asp-validation-for="Password"
+                              class="validation-message">
+                        </span>
+
+                    </div>
+                                        <div style="text-align:right; margin-bottom:15px;">
+                        <a asp-controller="ForgotPassword" asp-action="ForgotPassword_Pageload">Forgot password?</a>
+                    </div>
+
+                
+
+
+                    <button type="submit" class="login-btn">
+                        Login
+                    </button>
+
+                </form>
+
+
+                <!-- SIGN UP LINK -->
+
+                <div class="signup-text">
+
+                    Don't have an account?
+
+                    <a asp-controller="Register"
+                       asp-action="UserRegister_Pageload">
+                        Sign Up
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+@* @model BookMyTicket.Models.User_Register
+<form asp-action="Login_Button_Click" class="form-horizondal">
+    <div class="form-group">
+        <label class="control-label">User Name</label>
+        <input asp-for="User_Name" id="txt1" class="form-control" />
+        <span asp-validation-for="User_Name" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label class="control-label">Password</label>
+        <input type="password" asp-for="Password" id="txt2" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Login" class="btn btn-danger" />
+    </div>
+
+</form>
+@{
+    if(@TempData["msglog"]!=null)
+    {
+        
+        <script>
+            alert('@TempData["msglog"]')
+            document.getElementById['txt1'].value="";
+            document.getElementById['txt2'].value="";
+
+        </script>
+    }
+} *@

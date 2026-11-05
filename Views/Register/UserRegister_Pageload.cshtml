@@ -1,0 +1,239 @@
+﻿@model BookMyTicket.Models.User_Register
+
+<style>
+   body {
+    background: linear-gradient(
+        135deg,
+        var(--page-bg),
+        var(--navbar-bg)
+    );
+    color: var(--text-color);
+}
+
+    .register-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 15px;
+    }
+
+    .register-card {
+        width: 850px;
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .register-title {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .register-subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+    .form-control {
+        height: 45px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+            outline: none;
+        }
+
+    select.form-control {
+        cursor: pointer;
+        background-color: white;
+    }
+
+    .text-danger {
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .register-btn {
+        width: 100%;
+        height: 48px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+        }
+
+    .login-text {
+        text-align: center;
+        margin-top: 20px;
+        color: #777;
+    }
+
+        .login-text a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .login-text a:hover {
+                text-decoration: underline;
+            }
+
+    .row {
+        display: flex;
+        gap: 20px;
+    }
+
+    .col-half {
+        width: 50%;
+    }
+
+    .page-icon {
+        text-align: center;
+        font-size: 45px;
+        margin-bottom: 10px;
+    }
+
+   
+</style>
+
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <div class="page-icon">
+            🎟
+        </div>
+
+        <h2 class="register-title">Create Your Account</h2>
+
+        <p class="register-subtitle">
+            Join BookMyTicket and start booking your favourite movies
+        </p>
+
+
+        <form asp-action="Insert_Click" method="post">
+
+            
+                    <div class="form-group">
+                        <label>User Name</label>
+                        <input type="text" asp-for="User_Name" class="form-control" id="t1" placeholder="Enter username" />                
+                        <span asp-validation-for="User_Name" class="text-danger"></span>                             
+                    </div>
+
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" asp-for="FullName" class="form-control" id="t2" placeholder="Enter your full name" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+             
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" asp-for="Email" class="form-control" id="t3" placeholder="Enter your email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" asp-for="Phone" class="form-control" id="t5" placeholder="Enter 10 digit phone number" />                                                                                          
+                        <span asp-validation-for="Phone" class="text-danger"></span>                            
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" asp-for="Address" class="form-control" id="t4" placeholder="Enter your address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+   
+                    <div class="form-group">
+                        <label>Role</label>
+                    <select asp-for="Role" class="form-control" id="t6">
+                        <option value="">Select Role</option>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Theatre Owner">Theatre Owner</option>                
+                        </select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                    <input type="password" asp-for="Password" class="form-control" id="t7" placeholder="Enter password" />                               
+                    <span asp-validation-for="Password" class="text-danger"></span>                             
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control" id="t8" placeholder="Re-enter password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create Account" class="register-btn" />
+            </div>
+           <div class="login-text">
+             Already have an account?
+             <a asp-controller="Login" asp-action="Login_Pageload">
+               Login here
+             </a>
+            </div>  
+        </form>
+    </div>
+</div>
+
+
+<!-- Success/Error Message -->
+@{
+    if (TempData["msg"] != null)
+    {
+        <script>
+
+            alert('@TempData["msg"]');
+
+            document.getElementById('t1').value = "";
+            document.getElementById('t2').value = "";
+            document.getElementById('t3').value = "";
+            document.getElementById('t4').value = "";
+            document.getElementById('t5').value = "";
+            document.getElementById('t6').value = "";
+            document.getElementById('t7').value = "";
+            document.getElementById('t8').value = "";
+
+
+        </script>
+    }
+}
+
+

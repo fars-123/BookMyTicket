@@ -1,0 +1,843 @@
+﻿@model List<BookMyTicket.Models.Screen>
+
+<style>
+    body {
+        margin: 0;
+        background-color: #0b0b0b;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .seat-container {
+        width: 90%;
+        margin: 45px auto;
+        text-align: center;
+        color: white;
+    }
+
+    .title {
+        font-family: "Trebuchet MS", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 45px;
+        color: #f5f5f5;
+    }
+
+    .screen-name {
+        color: #aaa;
+        font-size: 17px;
+        font-weight: 500;
+        margin-bottom: 22px;
+    }
+
+    .screen {
+        width: 55%;
+        max-width: 600px;
+        min-width: 280px;
+        height: 35px;
+        margin: 0 auto 75px auto;
+        position: relative;
+        z-index: 2;
+        background: transparent;
+        border-top: 2px solid rgba(255, 255, 255, 0.95);
+        border-left: 2px solid rgba(255, 255, 255, 0.65);
+        border-right: 2px solid rgba(255, 255, 255, 0.65);
+        border-radius: 100% 100% 0 0;
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.95), 0 0 10px rgba(255, 255, 255, 0.55), 0 0 22px rgba(255, 255, 255, 0.25);
+    }
+
+        .screen::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 88%;
+            height: 75px;
+            background: radial-gradient( ellipse at top, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055) 40%, transparent 75% );
+            border-radius: 50% 50% 0 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .screen::after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 78%;
+            height: 145px;
+            background: radial-gradient( ellipse at top, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.065) 25%, rgba(255, 255, 255, 0.035) 45%, rgba(255, 255, 255, 0.012) 62%, transparent 80% );
+            border-radius: 0 0 50% 50%;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+    .seat-area {
+        padding: 10px 20px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .seat-row {
+        margin-bottom: 12px;
+    }
+
+    .seat {
+        display: inline-block;
+        margin: 5px;
+    }
+
+        .seat input {
+            display: none;
+        }
+
+        .seat span {
+            width: 45px;
+            height: 45px;
+            background-color: #414141;
+            color: #d8d8d8;
+            border: 1px solid #5d5d5d;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+            .seat span:hover {
+                background-color: #505050;
+                border-color: #858585;
+                transform: scale(1.05);
+            }
+
+        .seat input:checked + span {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #111;
+            box-shadow: inset 0 0 8px #9b7100, inset 0 0 3px #fff3b0, 0 0 7px rgba(255, 193, 7, 0.35);
+        }
+
+        /* DISABLED BOOKED SEATS */
+        .seat input:disabled + span {
+            background-color: #171717;
+            color: #777;
+            border-color: #333;
+            cursor: not-allowed;
+            opacity: 0.55;
+            box-shadow: none;
+        }
+
+            .seat input:disabled + span:hover {
+                background-color: #171717;
+                border-color: #333;
+                transform: none;
+            }
+
+    .seat-info {
+        margin-bottom: 25px;
+        color: #aaa;
+        font-size: 13px;
+    }
+
+        .seat-info span {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+    .continue-button-container {
+        text-align: center;
+        margin: 35px auto 50px auto;
+    }
+
+    .continue-button {
+        padding: 12px 40px;
+        background-color: #ffc107;
+        color: #111;
+        border: none;
+        border-radius: 7px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+        .continue-button:hover {
+            background-color: #e0a800;
+        }
+</style>
+
+<form asp-controller="Customer"
+      asp-action="Continue_Booking_seats"
+      method="post">
+
+    <div class="seat-container">
+
+        <h2 class="title">Select Seats</h2>
+
+        @if (Model != null && Model.Count > 0)
+        {
+            <input type="hidden"
+                   name="Screen_Id"
+                   value="@Model[0].Screen_Id" />
+
+            <div class="seat-info">
+                <span>⬛ Available</span>
+                <span>🟨 Selected</span>
+                <span>⬜ Booked / Reserved</span>
+            </div>
+
+            @foreach (var set in Model)
+            {
+                <h3 class="screen-name">@set.ScreenName</h3>
+
+                <div class="screen"></div>
+
+                <div class="seat-area">
+
+                    @for (int i = 1; i <= set.Rows; i++)
+                    {
+                        <div class="seat-row">
+
+                            @for (int j = 1; j <= set.Columns; j++)
+                            {
+                                string result =
+                                    Convert.ToString(i) +
+                                    Convert.ToString(j);
+
+                                bool unavailable =
+                                    set.UnavailableSeats != null &&
+                                    set.UnavailableSeats.Any(
+                                        seat => seat.Trim() == result
+                                    );
+
+                                <label class="seat">
+
+                                    <input type="checkbox"
+                                           name="seats"
+                                           value="@result"
+                                           disabled="@unavailable" />
+
+                                    <span>@result</span>
+
+                                </label>
+                            }
+
+                        </div>
+                    }
+
+                </div>
+            }
+        }
+        else
+        {
+            <p>No screen details found.</p>
+        }
+
+    </div>
+
+    <div class="continue-button-container">
+        <button type="submit" class="continue-button">
+            Continue
+        </button>
+    </div>
+
+</form>
+
+
+
+
+@* @model List<BookMyTicket.Models.Screen>
+
+<style>
+
+    body {
+        margin: 0;
+        background-color: #0b0b0b;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+
+    /* =========================
+           MAIN CONTAINER
+           ========================= */
+
+    .seat-container {
+        width: 90%;
+        margin: 45px auto;
+        text-align: center;
+        color: white;
+    }
+
+
+    /* =========================
+           TITLE
+           ========================= */
+
+    .title {
+        font-family: "Trebuchet MS", sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 45px;
+        color: #f5f5f5;
+    }
+
+
+    /* =========================
+           SCREEN NAME
+           ========================= */
+
+    .screen-name {
+        color: #aaa;
+        font-size: 17px;
+        font-weight: 500;
+        margin-bottom: 22px;
+    }
+
+
+    /* =========================
+           CINEMA ARCH
+           ========================= */
+
+    .screen {
+        width: 55%;
+        max-width: 600px;
+        min-width: 280px;
+        height: 35px;
+        margin: 0 auto 75px auto;
+        position: relative;
+        z-index: 2;
+        /*
+               No filled colour.
+               Only an illuminated arch.
+            */
+
+        background: transparent;
+        /*
+               Curved top of the cinema screen
+            */
+
+        border-top: 2px solid rgba(255, 255, 255, 0.95);
+        border-left: 2px solid rgba(255, 255, 255, 0.65);
+        border-right: 2px solid rgba(255, 255, 255, 0.65);
+        /*
+               Makes the top rounded like an arch
+            */
+
+        border-radius: 100% 100% 0 0;
+        /*
+               Soft white glow around the arch
+            */
+
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.95), 0 0 10px rgba(255, 255, 255, 0.55), 0 0 22px rgba(255, 255, 255, 0.25);
+    }
+
+
+        /* =========================
+           LIGHT INSIDE THE ARCH
+           ========================= */
+
+        .screen::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            /*
+               Light stays inside the arch
+            */
+
+            width: 88%;
+            height: 75px;
+            background: radial-gradient( ellipse at top, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055) 40%, transparent 75% );
+            border-radius: 50% 50% 0 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+
+        /* =========================
+           LIMITED LIGHT BEAM
+           ========================= */
+
+        .screen::after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            /*
+               Narrower beam
+            */
+
+            width: 78%;
+            height: 145px;
+            /*
+               Soft white light
+            */
+
+            background: radial-gradient( ellipse at top, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.065) 25%, rgba(255, 255, 255, 0.035) 45%, rgba(255, 255, 255, 0.012) 62%, transparent 80% );
+            /*
+               Curved outside boundary
+            */
+
+            border-radius: 0 0 50% 50%;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+
+    /* =========================
+           SEAT AREA
+           ========================= */
+
+    .seat-area {
+        padding: 10px 20px;
+        position: relative;
+        z-index: 3;
+    }
+
+
+    /* =========================
+           SEAT ROW
+           ========================= */
+
+    .seat-row {
+        margin-bottom: 12px;
+    }
+
+
+    /* =========================
+           SEAT
+           ========================= */
+
+    .seat {
+        display: inline-block;
+        margin: 5px;
+    }
+
+
+        /* Hide checkbox */
+
+        .seat input {
+            display: none;
+        }
+
+
+        /* =========================
+           SEAT BOX
+           ========================= */
+
+        .seat span {
+            width: 45px;
+            height: 45px;
+            background-color: #414141;
+            color: #d8d8d8;
+            border: 1px solid #5d5d5d;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+
+            /* =========================
+           SEAT HOVER
+           ========================= */
+
+            .seat span:hover {
+                background-color: #505050;
+                border-color: #858585;
+                transform: scale(1.05);
+            }
+
+
+        /* =========================
+           SELECTED SEAT
+           ========================= */
+
+        .seat input:checked + span {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #111;
+            box-shadow: inset 0 0 8px #9b7100, inset 0 0 3px #fff3b0, 0 0 7px rgba(255, 193, 7, 0.35);
+        }
+
+</style>
+
+
+
+
+<form asp-controller="Customer"
+      asp-action="Continue_Booking_seats"
+      method="post">
+
+    <div class="seat-container">
+
+        <h2 class="title">Select Seats</h2>
+
+        <input type="hidden"
+               name="Screen_Id"
+               value="@Model[0].Screen_Id" />
+
+        @foreach (var set in Model)
+        {
+            <h3 class="screen-name">@set.ScreenName</h3>
+
+            <div class="screen"></div>
+
+            <div class="seat-area">
+
+                @for (int i = 1; i <= set.Rows; i++)
+                {
+                    <div class="seat-row">
+
+                        @for (int j = 1; j <= set.Columns; j++)
+                        {
+                            string result = Convert.ToString(i) + Convert.ToString(j);
+
+                            <label class="seat">
+                                <input type="checkbox"
+                                       name="seats"
+                                       value="@result" />
+
+                                <span>@result</span>
+                            </label>
+                        }
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+    <button type="submit">Continue</button>
+
+</form>
+
+<form asp-controller="Customer" asp-action="Continue_Booking_seats" method="post">
+
+<div class="seat-container">
+    <h2 class="title"> Select Seats</h2>
+
+
+
+
+    @foreach (var set in Model)
+    {
+        <input type="hidden" name="Screen_Id" value="@Model[0].Screen_Id" />
+
+        <h3 class="screen-name">@set.ScreenName</h3>
+        <div class="screen"></div>
+        <div class="seat-area">
+
+
+            @for (int i = 1; i <= set.Rows; i++)
+            {
+                <div class="seat-row">
+                    @for (int j = 1; j <= set.Columns; j++)
+                    {
+                        string result =
+                            Convert.ToString(i) +
+                            Convert.ToString(j);
+
+                        <label class="seat">
+                            <input type="checkbox" name="seats" value="@result" />
+                            <span> @result </span>
+                        </label>
+
+                    }
+
+
+                </div>
+
+            }
+
+
+        </div>
+
+    }
+
+</div>
+<button type="submit">Continue</button>
+</form>> *@
+
+
+@* @model List<BookMyTicket.Models.Screen>
+
+<style>
+
+    body {
+        background-color: #f7f7f7;
+    }
+
+    .seat-container {
+        width: 80%;
+        margin: 40px auto;
+        text-align: center;
+    }
+
+    .title {
+        font-size: 28px;
+        margin-bottom: 8px;
+        color: #222;
+    }
+
+    .subtitle {
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .screen {
+        width: 55%;
+        margin: 0 auto 40px auto;
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border-radius: 4px;
+        font-size: 13px;
+        letter-spacing: 2px;
+        box-shadow: 0 3px 8px #ccc;
+    }
+
+    .seat-area {
+        background-color: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px #ddd;
+        display: inline-block;
+        min-width: 70%;
+    }
+
+    .seat-row {
+        margin-bottom: 8px;
+    }
+
+    .seat {
+        display: inline-block;
+        margin: 4px;
+    }
+
+        .seat input {
+            display: none;
+        }
+
+        .seat span {
+            width: 42px;
+            height: 42px;
+            border: 1px solid #999;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+            color: #333;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+            .seat span:hover {
+                border-color: #555;
+                background-color: #f5f5f5;
+            }
+
+        .seat input:checked + span {
+            background-color: #e8e8e8;
+            border-color: #333;
+            box-shadow: inset 0 0 9px #777;
+        }
+
+    .seat-info {
+        margin-top: 25px;
+        color: #777;
+        font-size: 13px;
+    }
+
+</style>
+
+
+<div class="seat-container">
+
+    <h2 class="title">Select Your Seats</h2>
+
+    <p class="subtitle">
+        Choose your preferred seats
+    </p>
+
+
+    @foreach (var set in Model)
+    {
+        <h3>@set.ScreenName</h3>
+
+
+        <div class="screen">
+            SCREEN
+        </div>
+
+
+        <div class="seat-area">
+
+            @for (int i = 1; i <= set.Rows; i++)
+            {
+                <div class="seat-row">
+
+                    @for (int j = 1; j <= set.Columns; j++)
+                    {
+                        string result = Convert.ToString(i) + Convert.ToString(j);
+
+                        <label class="seat">
+
+                            <input type="checkbox"
+                                   name="seats"
+                                   value="@result" />
+
+                            <span>@result</span>
+
+                        </label>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+
+        <div class="seat-info">
+            Click a seat to select it
+        </div>
+    }
+
+</div> *@
+
+
+
+@* @model List<BookMyTicket.Models.Screen>
+
+<style>
+
+    .seat-container {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .seat {
+        display: inline-block;
+        margin: 5px;
+    }
+
+        .seat input {
+            display: none;
+        }
+
+        .seat span {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background-color: white;
+            font-size: 14px;
+        }
+
+        .seat input:checked + span {
+            background-color: #ddd;
+        }
+
+            .seat input:checked + span::after {
+                content: "✓";
+                position: absolute;
+                margin-left: 25px;
+                margin-top: -25px;
+                font-size: 14px;
+            }
+
+</style>
+
+
+<div class="seat-container">
+
+    <h2>Select Your Seats</h2>
+
+    @foreach (var set in Model)
+    {
+        <h3>@set.ScreenName</h3>
+
+        for (int i = 1; i <= set.Rows; i++)
+        {
+            <div>
+
+                @for (int j = 1; j <= set.Columns; j++)
+                {
+                    string r = Convert.ToString(i);
+                    string c = Convert.ToString(j);
+
+                    string result = r + c;
+
+                    <label class="seat">
+
+                        <input type="checkbox"
+                               name="seats"
+                               value="@result" />
+
+                        <span>
+                            @result
+                        </span>
+
+                    </label>
+                }
+
+            </div>
+        }
+    }
+
+</div> *@
+
+
+
+
+
+
+
+
+
+
+
+@* @model list<bookmyticket.models.screen>
+
+@foreach(var set in model)
+{
+    for(int i =1;i<set.rows;i++)
+    {
+        for(int j=1;j<set.columns;j++)
+        {
+            string r = convert.tostring(i); 
+            string c = convert.tostring(j);
+
+            string result = r + " " + c;
+
+            <button>@result</button>
+            
+        }
+
+        <br/>
+
+    }
+}
+ *@
